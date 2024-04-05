@@ -86,16 +86,37 @@ class Game extends Phaser.Scene {
     });
 
     this.addMap();
+    this.addHero();
 
+    this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+    this.cameras.main.startFollow(this.hero);
+  }
+
+  addHero() {
     this.hero = new Hero(this, 250, 160);
 
+    this.children.moveTo(this.hero, this.children.getIndex(this.map.getLayer('Foreground').tilemapLayer));
+
+    this.physics.add.collider(this.hero, this.map.getLayer('Ground').tilemapLayer);
   }
 
   addMap() {
     this.map = this.make.tilemap({ key:'level-1' });
     const groundTiles = this.map.addTilesetImage('world-1', 'world-1-sheet');
 
-    this.map.createStaticLayer('Ground', groundTiles);
+    const groundLayer = this.map.createStaticLayer('Ground', groundTiles);
+    groundLayer.setCollision([1, 2, 4], true);
+
+
+    this.map.createStaticLayer('Foreground', groundTiles);
+
+
+    this.physics.world.setBounds(0,0, this.map.widthInPixels, this.map.heightInPixels);
+    this.physics.world.setBoundsCollision(true, true, false, true);
+
+
+    //const debugGraphics = this.add.graphics();
+    //groundLayer.renderDebug(debugGraphics);
   }
 
   update(time, delta) {}
