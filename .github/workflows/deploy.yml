@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '16'
 
@@ -24,4 +27,4 @@ jobs:
         with:
           branch: gh-pages  # The branch the action should deploy to.
           folder: dist       # The folder the action should deploy.
-          token: ${{ secrets.PERSONAL_TOKEN }}
+          token: ${{ secrets.PERSONAL_TOKEN }}  # Ensure this PAT has 'repo' scope.
